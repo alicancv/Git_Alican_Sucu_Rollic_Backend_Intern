@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title> Index </title>
+    </head>
+    <body>
+        
+        <div>
+            <h2>Add a User</h2>
+            <label for='userName'> User Name:</label>
+            <input type='text' id='userName' name='userName' required>
+            <label for='userPass'> User Password:</label>
+            <input type='password' id='userPass' name='userPass' required>
+            <label for='userEmail'> User Email:</label>
+            <input type='text' id='userEmail' name='userEmail' required>
+            <button id='addUserButton'>Add User</button>
+        </div>
+
+        <div>
+            <h2>Edit a User's Attribute</h2>
+            <label for='editUserId'> User ID: </label>
+            <input type='text' id='editUserId' name='editUserId' required>
+            <label for='editUserName'> User Name:</label>
+            <input type='text' id='editUserName' name='editUserName' required>
+            <label for='editUserPass'> User Password:</label>
+            <input type='password' id='editUserPass' name='editUserPass' required>
+            <button id='editUserButton'>Edit User</button>
+        </div>
+
+        <div>
+            <h2>Delete a User</h2>
+            <label for='deleteUserId'> User ID to delete user: </label>
+            <input type='text' id='deleteUserId' name='deleteUserId' required>
+            <button id='deleteUserButton'>Delete User</button>
+        </div>
+
+       <script>
+        //Adding a User
+        const addUserButton = document.getElementById('addUserButton');
+
+        addUserButton.addEventListener('click', (e) => {
+            const user = JSON.stringify({
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                password: document.getElementById('userPass').value
+            });
+
+            fetch('/users', {
+                method: 'PUT',
+                headers : {'Content-Type' : 'application/json'},
+                body: user
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
+        });
+
+        //Edit a User
+        const editUserButton = document.getElementById('editUserButton');
+
+        editUserButton.addEventListener('click', (e) => {
+            const userUpdates = JSON.stringify({
+                name: document.getElementById('editUserName').value,
+                password: document.getElementById('editUserPass').value
+            });
+
+            fetch('/users/' + document.getElementById('editUserId').value, {
+                method: 'PATCH',
+                headers: {'Content-Type' : 'application/json'},
+                body: userUpdates
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
+        });
+
+        //Delete a User
+        const deleteUserButton = document.getElementById('deleteUserButton');
+
+        deleteUserButton.addEventListener('click', (e) => {
+            fetch('/users/' + document.getElementById('deleteUserId').value, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
+        });
+
+       </script>
+
+    </body>
+</html>
